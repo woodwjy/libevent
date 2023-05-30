@@ -358,6 +358,9 @@ EVENT2_EXPORT_SYMBOL
 void evhttp_set_bevcb(struct evhttp *http,
     struct bufferevent *(*cb)(struct event_base *, void *), void *arg);
 
+EVENT2_EXPORT_SYMBOL
+void evhttp_set_comcb(struct evhttp *http,
+    int (*cb)(struct evhttp_request *, void *), void *arg);
 
 /**
    Set a callback which allows the user to note or throttle incoming requests.

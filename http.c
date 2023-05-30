@@ -3803,6 +3803,14 @@ evhttp_handle_request(struct evhttp_request *req, void *arg)
 		evhttp_find_vhost(http, &http, hostname);
 	}
 
+	if (http->comcb) {
+		int result = (*http->comcb)(req, http->comcbarg);
+		if (result != 0)
+		{
+			return;
+		}
+	}
+
 	if ((cb = evhttp_dispatch_callback(&http->callbacks, req)) != NULL) {
 		(*cb->cb)(req, cb->cbarg);
 		return;
@@ -4290,6 +4298,14 @@ evhttp_set_gencb(struct evhttp *http,
 {
 	http->gencb = cb;
 	http->gencbarg = cbarg;
+}
+
+void
+evhttp_set_comcb(struct evhttp *http,
+    int (*cb)(struct evhttp_request *, void *), void *cbarg)
+{
+	http->comcb = cb;
+	http->comcbarg = cbarg;
 }
 
 void
